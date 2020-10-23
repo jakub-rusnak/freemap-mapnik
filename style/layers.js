@@ -5,10 +5,10 @@ const towerType = `concat("class", '_', case type
   when 'observation' then 'observation'
   else 'other' end) as type`;
 
-const importantFeatures = `
-   'alpine_hut', 'wilderness_hut', 'camp_site', 'hut', 'cabin',
-   'saddle'
-  `;
+// const importantFeatures = `
+//    'alpine_hut', 'wilderness_hut', 'camp_site', 'hut', 'cabin',
+//    'saddle'
+//   `;
 
 function getFeaturesSql(zoom) {
   const sqls = [`select * from (
@@ -22,19 +22,19 @@ function getFeaturesSql(zoom) {
   if (zoom >= 12) {
     sqls.push(`
       union all select osm_id, geometry, name,         ele, type
-        from osm_features where type in (${importantFeatures})
+        from osm_features where type <> 'peak'
       union all select osm_id, geometry, name,         ele, case type when 'communications_tower' then 'tower_communication' else type end as type
-        from osm_feature_polys where type in (${importantFeatures})
+        from osm_feature_polys 
     `);
   }
 
   if (zoom >= 14) {
-    sqls.push(`
-      union all select osm_id, geometry, name,         ele, type
-        from osm_features where type <> 'peak' and type not in (${importantFeatures})  
-      union all select osm_id, geometry, name,         ele, case type when 'communications_tower' then 'tower_communication' else type end as type
-        from osm_feature_polys where type not in (${importantFeatures})
+  //   union all select osm_id, geometry, name,         ele, type
+  //   from osm_features where type <> 'peak' and type not in (${importantFeatures})  
+  // union all select osm_id, geometry, name,         ele, case type when 'communications_tower' then 'tower_communication' else type end as type
+  //   from osm_feature_polys where type not in (${importantFeatures})
 
+    sqls.push(`
       union all select osm_id, geometry, name,         ele, case type when 'guidepost' then (case when name = '' then 'guidepost_noname' else 'guidepost' end) else type end as type
         from osm_infopoints          
 
@@ -241,20 +241,20 @@ function layers(shading, contours, hikingTrails, bicycleTrails, skiTrails, horse
   `;
 
   return map => map
-    .layer('sea',
-      {
-        type: 'shape',
-        file: 'simplified-land-polygons-complete-3857/simplified_land_polygons.shp',
-      },
-      { srs: '+init=epsg:3857', maxZoom: 9 }
-    )
-    .layer('sea',
-      {
-        type: 'shape',
-        file: 'land-polygons-split-3857/land_polygons.shp',
-      },
-      { srs: '+init=epsg:3857', minZoom: 10 }
-    )
+    // .layer('sea',
+    //   {
+    //     type: 'shape',
+    //     file: 'simplified-land-polygons-complete-3857/simplified_land_polygons.shp',
+    //   },
+    //   { srs: '+init=epsg:3857', maxZoom: 9 }
+    // )
+    // .layer('sea',
+    //   {
+    //     type: 'shape',
+    //     file: 'land-polygons-split-3857/land_polygons.shp',
+    //   },
+    //   { srs: '+init=epsg:3857', minZoom: 10 }
+    // )
     .sqlLayer('landcover',
       'select type, geometry from osm_landusages_gen0 where geometry && !bbox! order by z_order',
       { maxZoom: 9 },
