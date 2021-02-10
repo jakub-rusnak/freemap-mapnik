@@ -160,7 +160,7 @@ function generateFreemapStyle({
   custom, legendLayers, format } = {}
 ) {
   return createMap({
-    backgroundColor: legendLayers ? undefined : colors.water,
+    backgroundColor: legendLayers ? undefined : colors.white,
     srs: mercSrs,
   }, extensions)
     .fontSet('regular', ['PT Sans Regular', 'Fira Sans Condensed Regular'])
@@ -307,9 +307,9 @@ function generateFreemapStyle({
         .linePatternSymbolizer({ file: 'images/dyke.svg' })
       .typesRule(16, 'embankment')
         .linePatternSymbolizer({ file: 'images/embankment-half.svg' })
-      .typesRule(13, 'cliff')
-        .linePatternSymbolizer({ file: 'images/cliff.svg' })
-        .lineSymbolizer({ stroke: hsl(0, 0, 25), strokeWidth: 1 })
+      // .typesRule(13, 'cliff')
+      //   .linePatternSymbolizer({ file: 'images/cliff.svg' })
+      //   .lineSymbolizer({ stroke: hsl(0, 0, 0), strokeWidth: 1 })
       .typesRule(14, 'earth_bank')
         .linePatternSymbolizer({ file: 'images/earth_bank.svg' })
       .typesRule(13, 'line')
@@ -345,7 +345,7 @@ function generateFreemapStyle({
       .rule({ minZoom: 18 })
         .rasterSymbolizer({ scaling: 'bilinear', opacity: 0.80 })
       //style level opacity - polygon features everlap not visible
-      .style('cliffs_vector', {opacity: 0.5, compOp: 'overlay'})
+      .style('cliffs_vector', {opacity: 0.4, compOp: 'overlay'})
         .rule({ minZoom: 14 })
           //.borderedPolygonSymbolizer(hsl(0, 0, 0))
           .polygonSymbolizer({ fill: hsl(0, 0, 0) })
