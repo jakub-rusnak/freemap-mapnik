@@ -313,13 +313,19 @@ function layers(shading, contours, hikingTrails, bicycleTrails, skiTrails, horse
           "select geometry, type from osm_feature_lines where type not in ('cutline', 'valley', 'ridge')", // TODO for effectivity filter out cliffs/earth_banks
           { minZoom: 13, compOp: 'src-over' },
           ({ layer }) => {
+            // layer(
+            //   'mask',
+            //   {
+            //     type: 'gdal',
+            //     file: 'shading/sk-dmr5-mask.tif',
+            //   },
+            //   { compOp: 'dst-out' },
+            // );
             layer(
-              'mask',
-              {
-                type: 'gdal',
-                file: 'shading/sk-dmr5-mask.tif',
-              },
+              'mask_hqarea', 
+              { table: "(select geom from hq_area) as foo"}, 
               { compOp: 'dst-out' },
+              { base: 'db' }
             );
           }
         );
@@ -402,7 +408,13 @@ function layers(shading, contours, hikingTrails, bicycleTrails, skiTrails, horse
         "select geom from cliffs_split"
         );  
 
-        /*
+        map.sqlLayer('contours', 
+          '(select geom, height from contour_split)',
+          { minZoom: 12,}
+        );
+      
+
+        /* martinove experimenty s maskovanim - ja nepotrebujem, mam malu oblast
         // render sk-dmr5; use mask because mapnik has issues with no-data
         map.layer('mask', {
           type: 'gdal',

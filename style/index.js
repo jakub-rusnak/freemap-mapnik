@@ -331,6 +331,9 @@ function generateFreemapStyle({
     .style('mask') // hillshading helper for mask
       .rule()
         .rasterSymbolizer({ scaling: 'bilinear', opacity: 1.00 })
+    .style('mask_hqarea') // hillshading helper for mask hqarea
+      .rule()
+        .polygonSymbolizer({ fill: hsl(255, 255, 255) })      
     .style('hillshade')
       .rule({ /* minZoom: 8, */ maxZoom: 8 })
         .rasterSymbolizer({ scaling: 'lanczos', opacity: 1.00 })
