@@ -405,8 +405,13 @@ function layers(shading, contours, hikingTrails, bicycleTrails, skiTrails, horse
         });
 
         map.sqlLayer('cliffs_vector',
-        "select geom from cliffs_split"
+          "select geom from cliffs_simpl_1",
+          { minZoom: 14, maxZoom: 15 }
         );  
+        map.sqlLayer('cliffs_vector',
+          "select geom from cliffs_split",
+          { minZoom: 16 }
+        ); 
 
         map.sqlLayer('contours', 
           '(select geom, height from contour_split)',
